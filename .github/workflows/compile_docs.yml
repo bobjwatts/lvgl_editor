@@ -85,30 +85,4 @@ jobs:
             mkdir -p /tmp/xml
             python3 docs/scripts/xml_to_md.py examples /tmp/xml --source-base https://github.com/lvgl/lvgl/blob/${{ github.sha }}/examples
      
-      - name: Deploy Latest
-        if: >
-          github.ref == 'refs/heads/master' &&
-          (github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && github.event.inputs.deploy == 'true'))
-        run: |
-          git clone https://lvgl-bot:${{ secrets.LVGL_BOT_TOKEN }}@github.com/lvgl/pro-docs.git /tmp/pro-docs-latest
-
-          rm -rf /tmp/pro-docs-latest/latest
-          rm -rf /tmp/pro-docs-latest/xml/latest
-
-          mkdir -p /tmp/pro-docs-latest/latest/src
-          mkdir -p /tmp/pro-docs-latest/xml/latest
-
-          cp -r docs/. /tmp/pro-docs-latest/latest/src
-          mv /tmp/pro-docs-latest/latest/src/built_lv_examples /tmp/pro-docs-latest/latest/built_lv_examples
-          cp -r /tmp/xml/. /tmp/pro-docs-latest/xml/latest
-
-
-          rm -rf /tmp/pro-docs-latest/latest/src/examples
-          rm -rf /tmp/pro-docs-latest/latest/src/scripts
-
-          cd /tmp/pro-docs-latest
-          git config user.name bobjwatts
-          git config user.email bobjwatts@gmail.com
-          git add .
-          git diff --cached --quiet || git commit -m "Deploy latest from commit ${{ github.sha }}"
-          git push
+      
