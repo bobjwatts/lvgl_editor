@@ -27,7 +27,17 @@ jobs:
             - name: Get the previews branch
               run: |
                 git fetch origin
-                git branch lvgl-previews remotes/origin/lvgl-previews
+                # Create the branch locally if it doesn't exist on the remote yet
+                if git ls-remote --exit-code --heads origin lvgl-previews; then
+                  git branch lvgl-previews remotes/origin/lvgl-previews
+                else
+                  git checkout --orphan lvgl-previews
+                  git rm -rf .
+                  git commit --allow-empty -m "Initialize lvgl-previews branch"
+                  git push origin lvgl-previews
+                  git checkout ${{ github.event.inputs.branch }}
+                  git branch lvgl-previews remotes/origin/lvgl-previews
+                fi
 
             - name: Configure Git
               run: |
