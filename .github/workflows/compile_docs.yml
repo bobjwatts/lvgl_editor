@@ -107,8 +107,8 @@ jobs:
           rm -rf /tmp/pro-docs-latest/latest/src/scripts
 
           cd /tmp/pro-docs-latest
-          git config user.name lvgl-bot
-          git config user.email lvgl-bot@users.noreply.github.com
+          git config user.name bobjwatts
+          git config user.email bobjwatts@gmail.com
           git add .
           git diff --cached --quiet || git commit -m "Deploy latest from commit ${{ github.sha }}"
           git push
